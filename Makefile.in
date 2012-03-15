@@ -1,0 +1,16 @@
+
+CFLAGS ?= -O2 -Wall -pedantic -ggdb3
+
+CFLAGS := -std=gnu99 $(CFLAGS)
+
+EXTRA_LDFLAGS := @libprofiler_LIBS@
+
+EXTRA_CPPFLAGS := @libprofiler_CFLAGS@
+
+CPPFLAGS := $(EXTRA_CPPFLAGS) $(CPPFLAGS)
+
+profile_all_threads.so: profile_all_threads.o
+	gcc -shared -Wl,-soname,$@ -o $@ -ldl $< $(EXTRA_LDFLAGS)
+
+%.s: %.c
+	$(CC) $(CFLAGS) $(CPPFLAGS) -S -o $@ $<
